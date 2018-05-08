@@ -6,7 +6,7 @@ Instructions to build the image for the Terasic DE10-Nano\* development board an
 This layer provides support for building a demonstration and development image of Linux\* for the [Terasic DE10-Nano](https://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=205&No=1046&PartNo=8) kit's development board.
 
 ## Build Instructions
-Please refer to [README.md](https://github.com/Angstrom-distribution/angstrom-manifest/blob/master/README.md) for any prerequisites. These instructions assume prerequisites have been met.  
+Please refer to [README.md](https://github.com/Angstrom-distribution/angstrom-manifest/blob/master/README.md) for any prerequisites. These instructions assume prerequisites have been met.
 
 **Note**: See the instructions for configuring proxies.
 
@@ -23,7 +23,7 @@ Clone the manifest to get all required recipes for building the image.
 ```
 mkdir de10-nano-build
 cd de10-nano-build
-repo init -u git://github.com/Angstrom-distribution/angstrom-manifest -b angstrom-v2016.12-yocto2.2 
+repo init -u git://github.com/Angstrom-distribution/angstrom-manifest -b angstrom-v2016.12-yocto2.2
 ```
 ### Step 2: Add the meta-de10-nano Layer
 The default manifests do not include the meta-de10-layer. Therefore, we add the layer and resolve any issues encountered with errant layers.
@@ -35,15 +35,33 @@ Now we create the manifest to add the meta-de10-layer. The following will create
 
 ```
 cat << EOF > .repo/local_manifests/de10-nano.xml
-<?xml version="1.0" encoding="UTF-8"?>                                          
-<manifest>                                                                      
-        <remove-project name="kraj/meta-altera" />                              
-        <remove-project name="koenkooi/meta-photography" />                     
-        <remove-project name="openembedded/meta-linaro" />                      
-        <project name="openembedded/meta-linaro" path="layers/meta-linaro" remote="linaro" revision="992eaa0a1969c2056a5321c122eaa8cd808c1c82" upstream="master"/>
-        <project remote="github"  name="kraj/meta-altera" path="layers/meta-altera" revision="cf7fc462cc6a5e82f2de76bb21e09675be7ae316"/>
-        <project name="01org/meta-de10-nano" path="layers/meta-de10-nano" remote="github" revision="refs/tags/VERSION-2017.03.31"/>
-</manifest> 
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+        <remove-project name="96boards/meta-96boards" />
+        <remove-project name="koenkooi/meta-dominion" />
+        <remove-project name="koenkooi/meta-uav" />
+        <remove-project name="koenkooi/meta-edison" />
+        <remove-project name="koenkooi/meta-kodi" />
+        <remove-project name="ndechesne/meta-qcom" />
+        <remove-project name="linux-sunxi/meta-sunxi" />
+        <remove-project name="linux4sam/meta-atmel" />
+        <remove-project name="OSSystems/meta-browser" />
+        <remove-project name="meta-qt5/meta-qt5" />
+        <remove-project name="bmwcarit/meta-ros" />
+        <remove-project name="schnitzeltony/meta-gumstix-community" />
+        <remove-project name="schnitzeltony/meta-office" />
+
+        <remove-project name="meta-raspberrypi" />
+        <remove-project name="meta-java" />
+        <remove-project name="meta-qt4" />
+
+        <remove-project name="kraj/meta-altera" />
+        <remove-project name="koenkooi/meta-photography" />
+        <remove-project name="openembedded/meta-linaro" />
+        <project name="openembedded/meta-linaro" path="layers/meta-linaro" remote="linaro" upstream="master"/>
+        <project name="kraj/meta-altera" path="layers/meta-altera" remote="github" revision="374a62067cf5094cf177a724d1a179881d891a86"/>
+        <project name="corentin-pro/meta-de10-nano" path="layers/meta-de10-nano" remote="github" revision="9b9d168650569599b2513185b2364deb5ad389c4"/>
+</manifest>
 EOF
 ```
 The above also disables meta-photography, so we have to edit conf/bblayers.conf to remove the reference to it.
@@ -54,6 +72,68 @@ We also need to add in the new meta-de10-nano layer to the bblayers.conf
 
 ```
 sed -i '/meta-altera/a \ \ \$\{TOPDIR\}\/layers\/meta-de10-nano \\' .repo/manifests/conf/bblayers.conf
+```
+
+```
+cat << EOF > .repo/manifests/conf/bblayers.conf
+# LAYER_CONF_VERSION is increased each time build/conf/bblayers.conf
+# changes incompatibly
+LCONF_VERSION = "7"
+TOPDIR := "\${@os.path.dirname(os.path.dirname(d.getVar('FILE', True)))}"
+
+BBPATH = "\${TOPDIR}"
+
+BBFILES = ""
+
+# These layers hold recipe metadata not found in OE-core, but lack any machine or distro content
+BASELAYERS ?= " \\
+  \${TOPDIR}/layers/meta-openembedded/meta-oe \\
+  \${TOPDIR}/layers/meta-openembedded/meta-efl \\
+  \${TOPDIR}/layers/meta-openembedded/meta-gpe \\
+  \${TOPDIR}/layers/meta-openembedded/meta-gnome \\
+  \${TOPDIR}/layers/meta-openembedded/meta-xfce \\
+  \${TOPDIR}/layers/meta-openembedded/meta-initramfs \\
+  \${TOPDIR}/layers/meta-openembedded/meta-multimedia \\
+  \${TOPDIR}/layers/meta-openembedded/meta-networking \\
+  \${TOPDIR}/layers/meta-openembedded/meta-webserver \\
+  \${TOPDIR}/layers/meta-openembedded/meta-ruby \\
+  \${TOPDIR}/layers/meta-openembedded/meta-filesystems \\
+  \${TOPDIR}/layers/meta-openembedded/meta-perl \\
+  \${TOPDIR}/layers/meta-openembedded/meta-python \\
+  \${TOPDIR}/layers/meta-mono \\
+  \${TOPDIR}/layers/meta-openembedded/meta-systemd \\
+  \${TOPDIR}/layers/meta-maker \\
+"
+
+# These layers hold machine specific content, aka Board Support Packages
+BSPLAYERS ?= " \\
+  \${TOPDIR}/layers/meta-ti \\
+  \${TOPDIR}/layers/meta-freescale \\
+  \${TOPDIR}/layers/meta-freescale-3rdparty \\
+  \${TOPDIR}/layers/meta-altera \\
+  \${TOPDIR}/layers/meta-de10-nano \\
+  \${TOPDIR}/layers/meta-nslu2 \\
+  \${TOPDIR}/layers/meta-handheld \\
+  \${TOPDIR}/layers/meta-intel \\
+"
+
+# Add your overlay location to EXTRALAYERS
+# Make sure to have a conf/layers.conf in there
+EXTRALAYERS ?= " \\
+  \${TOPDIR}/layers/meta-linaro/meta-linaro \\
+  \${TOPDIR}/layers/meta-linaro/meta-linaro-toolchain \\
+  \${TOPDIR}/layers/meta-linaro/meta-aarch64 \\
+  \${TOPDIR}/layers/meta-linaro/meta-optee \\
+"
+
+BBLAYERS = " \\
+  \${TOPDIR}/layers/meta-angstrom \\
+  \${BASELAYERS} \\
+  \${BSPLAYERS} \\
+  \${EXTRALAYERS} \\
+  \${TOPDIR}/layers/openembedded-core/meta \\
+"
+EOF
 ```
 ### Step 3: Fetch the Repositories from the Manifest
 ```
@@ -68,7 +148,7 @@ bitbake de10-nano-image
 ```
 
 ## After Building the Image
-The result of this lengthy build is an image that can be written to an SD card which will enable the Terasic DE10-Nano board to boot Linux\*. The image provides access via serial port, a graphical interface, USB, and Ethernet. As part of the build, the recipes populate an FPGA image as well as the associated device trees.  
+The result of this lengthy build is an image that can be written to an SD card which will enable the Terasic DE10-Nano board to boot Linux\*. The image provides access via serial port, a graphical interface, USB, and Ethernet. As part of the build, the recipes populate an FPGA image as well as the associated device trees.
 
 The build output is located in deploy/glibc/images/de10-nano/
 
@@ -91,14 +171,14 @@ de10-nano-image-de10-nano.tar.gz                                            STAR
 de10-nano-image-de10-nano.tar.xz                                            STARTUP.BMP.LICENSE
 
 ```
-The SD card image name in the above list is "Angstrom-de10-nano-image-glibc-ipk-v2016.12-de10-nano.rootfs.socfpga-sdimg".  
+The SD card image name in the above list is "Angstrom-de10-nano-image-glibc-ipk-v2016.12-de10-nano.rootfs.socfpga-sdimg".
 
 **Note**: prebuilt images can be found [here](https://software.intel.com/en-us/iot/hardware/fpga/de10-nano).
 
 ### Write the Image to a MicroSD Card
 These instructions only cover Linux\*, for alternate instructions please go [here](https://software.intel.com/en-us/write-image-to-micro-sd-card).
 
-**Caution**: These instructions use the dd command which should be used with EXTREME CAUTION. It is very easy to accidentally overwrite the wrong device which can lead to data loss as well as hours spent rebuilding your machine. 
+**Caution**: These instructions use the dd command which should be used with EXTREME CAUTION. It is very easy to accidentally overwrite the wrong device which can lead to data loss as well as hours spent rebuilding your machine.
 
 The first step is to insert the SD Card using either a dedicated SD Card interface or a USB adapter into your machine. Discover which device this shows up. Usually the device shows up as /dev/sdX or /dev/mmcblkX where X is the device number. As an example, our dedicated SD Card interface shows up as /dev/mmcblk0.
 

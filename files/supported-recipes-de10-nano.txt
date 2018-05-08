@@ -64,7 +64,6 @@ enchant@core
 encodings@core
 epiphany@core
 ethtool@core
-exo@xfce-layer
 expat@core
 fftw@openembedded-layer
 findutils@core
@@ -75,7 +74,6 @@ fontconfig@core
 fontsproto@core
 font-util@core
 freetype@core
-garcon@xfce-layer
 gawk@core
 gcc@linaro-toolchain
 gcc-runtime@linaro-toolchain
@@ -101,7 +99,6 @@ gnome-themes-standard@core
 gnu-config@core
 gnuplot/archive@openembedded-layer
 gnuplot@openembedded-layer
-gnuplot/qtplot@openembedded-layer
 gnutls@core
 gobject-introspection@core
 grep@core
@@ -114,7 +111,6 @@ gtk+3@core
 gtk\+@core
 gtk+@core
 gtksourceview2@gnome-layer
-gtk-xfce-engine@xfce-layer
 gvfs@gnome-layer
 harfbuzz@core
 hicolor-icon-theme@core
@@ -186,7 +182,6 @@ libvorbis@core
 libwebp@core
 libwnck3@core
 libwnck@gnome-layer
-libx11@core
 libxau@core
 libxaw@openembedded-layer
 libxcb@core
@@ -195,8 +190,6 @@ libxcursor@core
 libxdamage@core
 libxdmcp@core
 libxext@core
-libxfce4ui@xfce-layer
-libxfce4util@xfce-layer
 libxfixes@core
 libxfont@core
 libxft@core
@@ -226,7 +219,6 @@ linux-libc-headers@core
 lttng-ust@core
 lz4@core
 m4@core
-machine-host@xfce-layer
 make@core
 .*@meta-de10-nano
 mkfontdir@core
@@ -266,7 +258,6 @@ python3-dbus@core
 python3-pygobject@core
 python3-setuptools@core
 python@core
-qtbase@qt5-layer
 quota@core
 randrproto@core
 readline/archive@core
@@ -300,8 +291,6 @@ sysfsutils@core
 systemd-compat-units@core
 systemd@core
 systemd-serialgetty@core
-thunar-volman@xfce-layer
-thunar@xfce-layer
 tiff@core
 timestamp-service@angstrom-layer
 tremor@core
@@ -318,7 +307,6 @@ volatile-binds@core
 vte9@openembedded-layer
 webkitgtk@core
 wpa-supplicant@core
-x11vnc@openembedded-layer
 xcb-proto@core
 xcb-util@core
 xcb-util-image@core
@@ -334,15 +322,6 @@ xf86-input-mouse@core
 xf86miscproto@core
 xf86-video-fbdev@core
 xf86vidmodeproto@core
-xfce4-dev-tools@xfce-layer
-xfce4-notifyd@xfce-layer
-xfce4-panel@xfce-layer
-xfce4-session@xfce-layer
-xfce4-settings@xfce-layer
-xfce4-terminal@xfce-layer
-xfconf@xfce-layer
-xfdesktop@xfce-layer
-xfwm4@xfce-layer
 xineramaproto@core
 xinit@core
 xkbcomp@core

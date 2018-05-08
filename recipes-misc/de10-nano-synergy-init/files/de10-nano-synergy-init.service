@@ -1,6 +1,6 @@
 [Unit]
 Description=Start synergy client
-After=de10-nano-xfce-init.service systemd-networkd-wait-online.service
+After=systemd-networkd-wait-online.service
 
 [Service]
 Type=forking

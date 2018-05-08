@@ -1,5 +1,5 @@
 PREFERRED_PROVIDER_virtual/kernel ?= "linux-altera-ltsi"
-PREFERRED_VERSION_linux-altera-ltsi ?= "4.1%"
+PREFERRED_VERSION_linux-altera-ltsi ?= "4.9%"
 
 PREFERRED_PROVIDER_virtual/bootloader ?= "u-boot-socfpga"
 PREFERRED_VERSION_u-boot-socfpga = "v2017.03%"
@@ -26,9 +26,9 @@ INHERIT += " rootfs_ipk "
 BAD_RECOMMENDATIONS = " libavahi-core avahi-utils avahi-daemon avahi-autoipd libnss-mdns cpufrequtils fbset consolekit wireless-tools "
 RDEPENDS_pulseaudio-module-console-kit_remove = "consolekit"
 
-DISTRO_FEATURES_remove = "opengl"                                               
-DISTRO_FEATURES_remove = "opencl"                                               
-DISTRO_FEATURES_remove = "wayland"                                              
+DISTRO_FEATURES_remove = "opengl"
+DISTRO_FEATURES_remove = "opencl"
+DISTRO_FEATURES_remove = "wayland"
 DISTRO_FEATURES_remove = "zeroconf"
 
 # remove wireless-tools as it is unmaintained
@@ -38,6 +38,6 @@ VIRTUAL-RUNTIME_wireless-tools = "iw"
 INHERIT += " extrausers "
 EXTRA_USERS_PARAMS = "usermod -p U6aMy0wojraho root;"
 
-require conf/distro/include/security_flags.inc 
+require conf/distro/include/security_flags.inc
 # with security flags, some packages fail
 SECURITY_CFLAGS_pn-libvncserver = ""
